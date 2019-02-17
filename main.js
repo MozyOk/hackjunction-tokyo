@@ -61,19 +61,15 @@ router.get('/pir', async function(req, res) {
 
     // pir_data is 0 or 1
     const pir_data = await GetLatestPirData();
-    const test = await JSON.stringify(pir_data);
 
-    console.log(test);
-
-
-    // if (pir_data === 1){
-    //   // staying human
-    //   signalControl(1,0);
-    // }
-    // else{
-    //   // Not stay human
-    //   signalControl(0,1);
-    // }
+    if (pir_data === 1){
+      // staying human
+      signalControl(1,0);
+    }
+    else{
+      // Not stay human
+      signalControl(0,1);
+    }
 
     res.send('CHANGE OK 😎');
 
@@ -162,10 +158,11 @@ function GetSignalState(){
 
 }
 
-function GetLatestPirData(){
-  const data = pir_data.orderByKey().limitToLast(1).once("value", function(snapshot) {
+async function  GetLatestPirData(){
+  const data = await pir_data.orderByKey().limitToLast(1).once("value", function(snapshot) {
     console.log(JSON.stringify(snapshot.val()));
   }); 
+  // FIX ME here is object!! not a string
   return data;
 }
 
